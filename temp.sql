@@ -1,46 +1,46 @@
-LOAD DATA LOCAL INFILE 'D:/tpc_basic_data/orders.txt'
+LOAD DATA LOCAL INFILE 'C:/Users/27577/Desktop/tools/教材/大三下/数据库/数据库系统原理课程设计-2-TPC电商数据管理系统/TPC-H V3.0.1/dbgen/orders.tbl'
 INTO TABLE ORDERS
 FIELDS TERMINATED BY '|' 
 LINES TERMINATED BY '\n'
 (O_ORDERKEY, O_CUSTKEY, O_ORDERSTATUS, O_TOTALPRICE, O_ORDERDATE, O_ORDERPRIORITY, O_CLERK, O_SHIPPRIORITY, O_COMMENT);
 
 
-LOAD DATA LOCAL INFILE 'D:/tpc_basic_data/nation.txt'
+LOAD DATA LOCAL INFILE 'C:/Users/27577/Desktop/tools/教材/大三下/数据库/数据库系统原理课程设计-2-TPC电商数据管理系统/TPC-H V3.0.1/dbgen/nation.tbl'
 INTO TABLE NATION
 FIELDS TERMINATED BY '|'
 LINES TERMINATED BY '\n'
 (N_NATIONKEY, N_NAME, N_REGIONKEY, N_COMMENT);
 
 
-LOAD DATA LOCAL INFILE 'D:/tpc_basic_data/supplier.txt'
+LOAD DATA LOCAL INFILE 'C:/Users/27577/Desktop/tools/教材/大三下/数据库/数据库系统原理课程设计-2-TPC电商数据管理系统/TPC-H V3.0.1/dbgen/supplier.tbl'
 INTO TABLE SUPPLIER
 FIELDS TERMINATED BY '|'
 LINES TERMINATED BY '\n'
 (S_SUPPKEY, S_NAME, S_ADDRESS, S_NATIONKEY, S_PHONE, S_ACCTBAL, S_COMMENT);
 
 
-LOAD DATA LOCAL INFILE 'D:/tpc_basic_data/part.txt'
+LOAD DATA LOCAL INFILE 'C:/Users/27577/Desktop/tools/教材/大三下/数据库/数据库系统原理课程设计-2-TPC电商数据管理系统/TPC-H V3.0.1/dbgen/part.tbl'
 INTO TABLE PART
 FIELDS TERMINATED BY '|'
 LINES TERMINATED BY '\n'
 (P_PARTKEY, P_NAME, P_MFGR, P_BRAND, P_TYPE, P_SIZE, P_CONTAINER, P_RETAILPRICE, P_COMMENT);
 
 
-LOAD DATA LOCAL INFILE 'D:/tpc_basic_data/partsupp.txt'
+LOAD DATA LOCAL INFILE 'C:/Users/27577/Desktop/tools/教材/大三下/数据库/数据库系统原理课程设计-2-TPC电商数据管理系统/TPC-H V3.0.1/dbgen/partsupp.tbl'
 INTO TABLE PARTSUPP
 FIELDS TERMINATED BY '|'
 LINES TERMINATED BY '\n'
 (PS_PARTKEY, PS_SUPPKEY, PS_AVAILQTY, PS_SUPPLYCOST, PS_COMMENT);
 
 
-LOAD DATA LOCAL INFILE 'D:/tpc_basic_data/customer.txt'
+LOAD DATA LOCAL INFILE 'C:/Users/27577/Desktop/tools/教材/大三下/数据库/数据库系统原理课程设计-2-TPC电商数据管理系统/TPC-H V3.0.1/dbgen/customer.tbl'
 INTO TABLE CUSTOMER
 FIELDS TERMINATED BY '|'
 LINES TERMINATED BY '\n'
 (C_CUSTKEY, C_NAME, C_ADDRESS, C_NATIONKEY, C_PHONE, C_ACCTBAL, C_MKTSEGMENT, C_COMMENT);
 
 
-LOAD DATA LOCAL INFILE 'D:/tpc_basic_data/lineitem.txt'
+LOAD DATA LOCAL INFILE 'C:/Users/27577/Desktop/tools/教材/大三下/数据库/数据库系统原理课程设计-2-TPC电商数据管理系统/TPC-H V3.0.1/dbgen/lineitem.tbl'
 INTO TABLE LINEITEM
 FIELDS TERMINATED BY '|'
 LINES TERMINATED BY '\n'

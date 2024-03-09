@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>数据库信息</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Delete Action</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
     <style>
         body, html {
             background-image: url('https://img.mp.itc.cn/upload/20170514/5e4142ab691047ae8d57a61c59817555_th.jpg');
@@ -54,18 +55,15 @@
     </style>
 </head>
 <body>
-<div class="container mt-4">
-    <h2>数据库信息</h2>
-    <div class="mt-3">
-        <p><strong>数据库 URL:</strong> {{ db_info.database_url }}</p>
-        <p><strong>数据库版本:</strong> {{ db_info.database_server_version }}</p>
-        <!-- 假设的其他数据库信息显示 -->
-        <p><strong>数据库缓冲区大小 (MB):</strong> {{ db_info.database_buffer_size_mb }}</p>
-        
-
+    <div class="container">
+        <h2 class="mt-5">Verify for Delete Action</h2>
+        <form method="POST" action="/verify-delete">
+            <div class="form-group mb-3">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Verify</button>
+        </form>
     </div>
-    <button onclick="history.back()" class="btn btn-primary">返回上一页</button>
-
-</div>
 </body>
 </html>

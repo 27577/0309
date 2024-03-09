@@ -53,6 +53,40 @@ def login():
             flash('Invalid username or password')
     return render_template('login.html')
 
+@app.route('/users')
+def view_users():
+    users = User.query.all()  # 获取所有用户
+    return render_template('view_users.html', users=users)
+
+@app.route('/verify-delete', methods=['GET', 'POST'])
+def verify_delete():
+    if request.method == 'POST':
+        password = request.form.get('password')
+        if password == '9417':
+            # 密码正确，重定向到删除用户的页面
+            return redirect(url_for('delete_users'))
+        else:
+            flash('Incorrect password. Please try again.')
+            return redirect(url_for('verify_delete'))
+    return render_template('verify_delete.html')
+
+
+@app.route('/delete-users', methods=['GET', 'POST'])
+def delete_users():
+    print("--------------------------------****************************\n")
+    if request.method == 'POST':
+        username = request.form.get('username')
+        user = User.query.filter_by(username=username).first()
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+            flash(f'User {username} has been deleted.')
+        else:
+            flash('User not found.')
+        return redirect(url_for('delete_users'))
+    return render_template('delete_users.html')
+
+
 @app.route('/workbench')
 def workbench():
     if 'username' in session:
@@ -128,6 +162,7 @@ def database_changeInfo():
     # 从 session 获取连接时长以显示在表单上
     connection_duration = session.get('connection_duration', 1)
     return render_template('database_changeInfo.html', connection_duration=connection_duration)
+
 
 
 if __name__ == '__main__':

@@ -8,25 +8,13 @@ db = SQLAlchemy()
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
-    # 直接存储密码，不再是散列值
     password = db.Column(db.String(512), nullable=False)
-    
-class Customer(db.Model):
-    __tablename__ = 'customer'
-    c_custkey = db.Column(db.Integer, primary_key=True)
-    c_name = db.Column(db.String(25), nullable=False)
-    c_address = db.Column(db.String(40), nullable=False)
-    c_nationkey = db.Column(db.Integer, nullable=False)
-    c_phone = db.Column(db.String(15), nullable=False)
-    c_acctbal = db.Column(db.Numeric(15, 2), nullable=False)
-    c_mktsegment = db.Column(db.String(10), nullable=False)
-    c_comment = db.Column(db.String(117), nullable=False)
-    
+
 class Order(db.Model):
     __tablename__ = 'orders'
     
     o_orderkey = db.Column(db.Integer, primary_key=True)
-    o_custkey = db.Column(db.Integer, nullable=False)
+    o_custkey = db.Column(db.Integer,db.ForeignKey('customer.c_custkey'), nullable=False)
     o_orderstatus = db.Column(db.CHAR(1), nullable=False)
     o_totalprice = db.Column(db.Numeric(15, 2), nullable=False)
     o_orderdate = db.Column(db.Date, nullable=False, default=datetime.utcnow)
@@ -34,6 +22,17 @@ class Order(db.Model):
     o_clerk = db.Column(db.CHAR(15), nullable=False)
     o_shippriority = db.Column(db.Integer, nullable=False)
     o_comment = db.Column(db.String(79), nullable=False)
+
+class Supplier(db.Model):
+    __tablename__ = 'supplier'
+    
+    s_suppkey = db.Column(db.Integer, primary_key=True)
+    s_name = db.Column(db.CHAR(25), nullable=False)
+    s_address = db.Column(db.String(40), nullable=False)
+    s_nationkey = db.Column(db.Integer, db.ForeignKey('nation.n_nationkey'), nullable=False)
+    s_phone = db.Column(db.CHAR(15), nullable=False)
+    s_acctbal = db.Column(db.Numeric(15, 2), nullable=False)
+    s_comment = db.Column(db.String(101), nullable=False)
 
 class Region(db.Model):
     __tablename__ = 'region'
@@ -49,17 +48,6 @@ class Nation(db.Model):
     n_name = db.Column(db.CHAR(25), nullable=False)
     n_regionkey = db.Column(db.Integer, db.ForeignKey('region.r_regionkey'), nullable=False)
     n_comment = db.Column(db.String(152), nullable=False)
-
-class Supplier(db.Model):
-    __tablename__ = 'supplier'
-    
-    s_suppkey = db.Column(db.Integer, primary_key=True)
-    s_name = db.Column(db.CHAR(25), nullable=False)
-    s_address = db.Column(db.String(40), nullable=False)
-    s_nationkey = db.Column(db.Integer, db.ForeignKey('nation.n_nationkey'), nullable=False)
-    s_phone = db.Column(db.CHAR(15), nullable=False)
-    s_acctbal = db.Column(db.Numeric(15, 2), nullable=False)
-    s_comment = db.Column(db.String(101), nullable=False)
 
 class Part(db.Model):
     __tablename__ = 'part'
@@ -85,12 +73,25 @@ class PartSupp(db.Model):
     ps_supplycost = db.Column(db.Numeric(15, 2), nullable=False)
     ps_comment = db.Column(db.String(199), nullable=False)
 
+class Customer(db.Model):
+    __tablename__ = 'customer'
+    c_custkey = db.Column(db.Integer, primary_key=True)
+    c_name = db.Column(db.String(25), primary_key=True)
+    c_address = db.Column(db.String(40), nullable=False)
+    c_nationkey = db.Column(db.Integer, db.ForeignKey('nation.n_nationkey'),nullable=False)
+    c_phone = db.Column(db.String(15), nullable=False)
+    c_acctbal = db.Column(db.Numeric(15, 2), nullable=False)
+    c_mktsegment = db.Column(db.String(10), nullable=False)
+    c_comment = db.Column(db.String(117), nullable=False)
+    
+
+
 class LineItem(db.Model):
     __tablename__ = 'lineitem'
     
-    l_orderkey = db.Column(db.Integer, primary_key=True)
-    l_partkey = db.Column(db.Integer, primary_key=True)
-    l_suppkey = db.Column(db.Integer, primary_key=True)
+    l_orderkey = db.Column(db.Integer, db.ForeignKey('order.o_orderkey'),primary_key=True)
+    l_partkey = db.Column(db.Integer,db.ForeignKey('part.p_prtkey'),nullable=False)
+    l_suppkey = db.Column(db.Integer,db.ForeignKey('supplier.s_suppkey'),nullable=False)
     l_linenumber = db.Column(db.Integer, primary_key=True)
     
     l_quantity = db.Column(db.Numeric(15, 2), nullable=False)
@@ -105,3 +106,8 @@ class LineItem(db.Model):
     l_shipinstruct = db.Column(db.CHAR(25), nullable=False)
     l_shipmode = db.Column(db.CHAR(10), nullable=False)
     l_comment = db.Column(db.String(44), nullable=False)
+
+
+
+
+    

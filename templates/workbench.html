@@ -6,6 +6,20 @@
     <title>Workbench</title>
     <!-- 引入 Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body, html {
+            background-image: url('https://img.mp.itc.cn/upload/20170514/5e4142ab691047ae8d57a61c59817555_th.jpg');
+        }
+        .center-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-size: 24px; /* Adjust the font size as needed */
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid">
@@ -16,7 +30,7 @@
                     <div class="card">
                         <div class="card-header" id="headingOne">
                             <h2 class="mb-0">
-                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="font-weight: bold; color: black;">
                                     系统管理
                                 </button>
                             </h2>
@@ -24,8 +38,8 @@
                         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#sidebarMenu">
                             <div class="card-body">
                                 <!-- 更新这里的链接 -->
-                                <a href="{{ url_for('database_info') }}">查看数据库信息</a><br>
-                                <a href="{{ url_for('database_changeInfo') }}">修改数据库信息</a><br>
+                                <a href="{{ url_for('database_info') }}" style="color: black;">查看数据库信息</a><br>
+                                <a href="{{ url_for('database_changeInfo') }}" style="color: black;">修改数据库信息</a><br>
                                 
                                 <!-- 更多功能链接 -->
                                 
@@ -41,15 +55,17 @@
                     <div class="card">
                         <div class="card-header" id="headingOne">
                             <h2 class="mb-0">
-                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="font-weight: bold; color: black;">
                                     用户管理
                                 </button>
                             </h2>
                         </div>
                         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#sidebarMenu">
                             <div class="card-body">
-                                <a href="#">查看用户信息</a><br>
-                                <a href="#">增删普通用户</a><br>
+                                <a href="{{ url_for('view_users') }}" style="color: black;">查看用户信息</a><br>
+                                <a href="{{ url_for('verify_delete') }}" style="color: black;">增删普通用户</a><br>
+                                <a href="{{ url_for('logout') }}" style="color: black;">退出登录/注销</a><br>
+
                                 
                                 <!-- 更多功能链接 -->
                             </div>
@@ -58,7 +74,7 @@
                     <div class="card">
                         <div class="card-header" id="headingOne">
                             <h2 class="mb-0">
-                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="font-weight: bold; color: black;">
                                     数据管理
                                 </button>
                             </h2>
@@ -76,14 +92,14 @@
                     <div class="card">
                         <div class="card-header" id="headingOne">
                             <h2 class="mb-0">
-                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="font-weight: bold; color: black;">
                                     业务查询
                                 </button>
                             </h2>
                         </div>
                         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#sidebarMenu">
                             <div class="card-body">
-                                <a href="{{ url_for('customer_search') }}">客户信息查询</a><br>
+                                <a href="{{ url_for('customer_search') }}" style="color: black;">客户信息查询</a><br>
                                 <a href="#">待补充</a><br>
                                 
                                 <!-- 更多功能链接 -->
@@ -93,8 +109,80 @@
                     <div class="card">
                         <div class="card-header" id="headingOne">
                             <h2 class="mb-0">
-                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="font-weight: bold; color: black;">
                                     业务分析
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#sidebarMenu">
+                            <div class="card-body">
+                                <a href="#">功能a</a><br>
+                                <a href="#">功能b</a><br>
+                                <a href="#">功能c</a><br>
+                                <a href="#">功能d</a><br>
+                                <!-- 更多功能链接 -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="font-weight: bold; color: black;">
+                                    TPC-H统计分析
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#sidebarMenu">
+                            <div class="card-body">
+                                <a href="#">功能a</a><br>
+                                <a href="#">功能b</a><br>
+                                <a href="#">功能c</a><br>
+                                <a href="#">功能d</a><br>
+                                <!-- 更多功能链接 -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="font-weight: bold; color: black;">
+                                    TPC-C 事务查询
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#sidebarMenu">
+                            <div class="card-body">
+                                <a href="#">功能a</a><br>
+                                <a href="#">功能b</a><br>
+                                <a href="#">功能c</a><br>
+                                <a href="#">功能d</a><br>
+                                <!-- 更多功能链接 -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="font-weight: bold; color: black;">
+                                    TPC-H 并发测试
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#sidebarMenu">
+                            <div class="card-body">
+                                <a href="#">功能a</a><br>
+                                <a href="#">功能b</a><br>
+                                <a href="#">功能c</a><br>
+                                <a href="#">功能d</a><br>
+                                <!-- 更多功能链接 -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="font-weight: bold; color: black;">
+                                    TPC-C 并发事务测试
                                 </button>
                             </h2>
                         </div>
@@ -111,14 +199,12 @@
                     <!-- 重复以上结构以添加更多一级菜单项和它们的二级菜单 -->
                 </div>
             </div>
-            <div class="col-10">
-                <!-- 主内容区域 -->
-                <h1>tpc benchmark电商数据管理系统</h1>
-                <!-- 内容 -->
-            </div>
+            
         </div>
     </div>
-
+    <div class="center-container">
+        TPC Benchmark 电商数据管理系统
+    </div>
     <!-- 引入 Bootstrap JS 和依赖 -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.9/dist/umd/popper.min.js"></script>
