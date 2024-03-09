@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据库信息</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>数据库信息</h2>
+    <div class="mt-3">
+        <p><strong>数据库 URL:</strong> {{ db_info.database_url }}</p>
+        <p><strong>数据库版本:</strong> {{ db_info.database_server_version }}</p>
+        <!-- 假设的其他数据库信息显示 -->
+        <p><strong>数据库缓冲区大小 (MB):</strong> {{ db_info.database_buffer_size_mb }}</p>
+        
+
+    </div>
+    <button onclick="history.back()" class="btn btn-primary">返回上一页</button>
+
+</div>
+</body>
+</html>

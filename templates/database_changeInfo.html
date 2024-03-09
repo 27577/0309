@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改数据库信息</title>
+</head>
+<body>
+    <h1>修改数据库信息</h1>
+    
+    {% for message in get_flashed_messages() %}
+    <div>{{ message }}</div>
+    {% endfor %}
+    
+    <form action="{{ url_for('database_changeInfo') }}" method="post">
+        <label for="connectionDuration">连接时长（秒）:</label>
+        <input type="number" id="connectionDuration" name="connectionDuration" value="{{ connection_duration }}" required>
+        <button type="submit">提交</button>
+    </form>
+</body>
+</html>
