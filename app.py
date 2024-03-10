@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db
 from sqlalchemy import text  # 导入 text 函数
+import subprocess
+import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'YourSecretKeyHere'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:9417@localhost/new_schema'
@@ -163,7 +165,23 @@ def database_changeInfo():
     connection_duration = session.get('connection_duration', 1)
     return render_template('database_changeInfo.html', connection_duration=connection_duration)
 
-
+@app.route('/data_gen', methods=['GET'])
+def data_gen():
+    # 显示命令输入表单
+    return render_template('data_gen.html')
+@app.route('/exe_gen', methods=['POST'])
+def exe_gen():
+    command_input = request.form['command']
+    # 构建命令行命令
+    dbgen_path = r"C:\Users\27577\Desktop\tools\教材\大三下\数据库\数据库系统原理课程设计-2-TPC电商数据管理系统\TPC-H\dbgen"
+    command = f"dbgen.exe {command_input}"
+    input_data = ('y\n'*8).encode('utf-8')
+    try:
+        # 执行命令
+        subprocess.run(command, input=input_data,check=True, shell=True, cwd=dbgen_path)
+        return "Command executed successfully."
+    except subprocess.CalledProcessError as e:
+        return f"An error occurred: {e}"
 
 if __name__ == '__main__':
     create_tables()
