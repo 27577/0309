@@ -1,10 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session,send_file, make_response
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db
 from sqlalchemy import text  # 导入 text 函数
 import subprocess
 import os
+import pandas as pd
+import io
+from io import BytesIO
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'YourSecretKeyHere'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:9417@localhost/new_schema'
@@ -192,6 +196,33 @@ def data_imp():
         return "Attempting to open MySQL client in a new terminal window..."
     except Exception as e:
         return f"An error occurred: {e}"
+
+def get_tables():
+    engine = db.get_engine()
+    with engine.connect() as conn:
+        # 使用 text() 封装 SQL 字符串
+        result = conn.execute(text("SHOW TABLES"))
+        tables = [row[0] for row in result]
+    return tables
+
+
+@app.route('/show_tables')
+def show_tables():
+    tables = get_tables()
+    return render_template('tables.html', tables=tables)
+
+@app.route('/download_table/<table_name>')
+def download_table(table_name):
+    engine = db.get_engine()
+    df = pd.read_sql_table(table_name, con=engine)
+
+    # 使用 BytesIO 替代 StringIO
+    output = BytesIO()
+    df.to_csv(output, index=False, encoding='utf-8')
+    output.seek(0)
+    
+    return send_file(output, as_attachment=True, download_name=f"{table_name}.csv", mimetype='text/csv')
+
 
 
 if __name__ == '__main__':

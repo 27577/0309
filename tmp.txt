@@ -1,2 +1,26 @@
 
 mysql --local-infile=1 -u root -p9417 new_schema < load_data.txt
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'YourSecretKeyHere'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:9417@localhost/new_schema'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
+def get_tables():
+    engine = db.get_engine()
+    print("*****************************************")
+    with engine.connect() as conn:
+        # 注意：这里直接使用原生 SQL 字符串
+        result = conn.execute("SHOW TABLES")
+        tables = [row[0] for row in result]
+    return tables
+
+
+@app.route('/show_tables')
+def show_tables():
+    tables = get_tables()
+    return render_template('tables.html', tables=tables)
+    
+if __name__ == '__main__':
+    create_tables()
+    app.run(debug=True)

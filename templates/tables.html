@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Database Tables</title>
+    <style>
+        body, html {
+            background-image: url('https://img.mp.itc.cn/upload/20170514/5e4142ab691047ae8d57a61c59817555_th.jpg');
+        }
+
+
+        html, body {
+    height: 100%;
+    margin: 0;
+    background-color: #f7f7f7; /* 轻微的背景色 */
+    font-family: Arial, sans-serif; /* 设置字体 */
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* 使内容垂直居中 */
+    padding: 20px;
+}
+
+ul {
+    list-style-type: none; /* 移除列表项前的默认符号 */
+    padding: 0;
+}
+
+li {
+    font-size: 20px; /* 增大字体大小 */
+    margin-bottom: 10px; /* 增加列表项之间的间距 */
+}
+
+a {
+    color: #007bff; /* 设置链接颜色 */
+    text-decoration: none; /* 移除链接下划线 */
+}
+
+a:hover {
+    text-decoration: underline; /* 鼠标悬停时添加下划线 */
+}
+
+      
+     
+    </style>
+</head>
+<body>
+    
+    <ul>
+        {% for table in tables %}
+            <li>
+                {{ table }} - <a href="{{ url_for('download_table', table_name=table) }}">Download</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
