@@ -124,6 +124,28 @@ def customer_search_results():
         flash('没有找到该客户的信息')
         return redirect(url_for('customer_search'))
 
+def get_all_customers():
+    return Customer.query.all()
+
+
+@app.route('/all_customers')
+def all_customers():
+    # 假设有一个函数 get_all_customers 来获取所有客户信息
+    customers = get_all_customers()
+    # 为了演示，我们使用一个固定的客户列表
+    # customers = [{'id': 1, 'name': '客户A'}, {'id': 2, 'name': '客户B'}]
+    return render_template('all_customers.html', customers=customers)
+
+@app.route('/customer_details/<customer_name>')
+def customer_details(customer_name):
+    # 使用 SQLAlchemy 查询特定名称的客户
+    customer = Customer.query.filter_by(c_name=customer_name).first()
+    
+    # 如果没有找到客户，返回 404 错误
+    
+    
+    return render_template('customer_details.html', customer=customer)
+
 @app.route('/database-info')
 def database_info():
     engine = db.get_engine()

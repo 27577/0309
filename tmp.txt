@@ -1,9 +1,5 @@
 
 mysql --local-infile=1 -u root -p9417 new_schema < load_data.txt
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'YourSecretKeyHere'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:9417@localhost/new_schema'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 def get_tables():
