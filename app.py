@@ -8,6 +8,7 @@ import os
 import pandas as pd
 import io
 from io import BytesIO
+import time
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'YourSecretKeyHere'
@@ -272,8 +273,12 @@ def order_priority():
             ORDER BY
                 o_orderpriority;
         """)
+        start_time = time.time()
         result = conn.execute(sql_query).fetchall()
-    return render_template('order_priority.html', results=result)
+        end_time = time.time()
+        execution_time=end_time-start_time
+        
+    return render_template('order_priority.html', results=result,execution_time=execution_time)
 
 @app.route('/part_supplier')
 def part_supplier():
@@ -312,8 +317,12 @@ def part_supplier():
                 p_size;
 
         """)
+        start_time = time.time()
         result = conn.execute(sql_query).fetchall()
-    return render_template('part_supplier_relation.html', results=result)
+        end_time = time.time()
+        execution_time=end_time-start_time
+        
+    return render_template('part_supplier_relation.html', results=result,execution_time=execution_time)
 
 @app.route('/repo_igni')
 def repo_igni():
@@ -349,8 +358,12 @@ def repo_igni():
                 value desc;
 
         """)
+        start_time = time.time()
         result = conn.execute(sql_query).fetchall()
-    return render_template('repo_igni.html', results=result)
+        end_time = time.time()
+        execution_time=end_time-start_time
+        
+    return render_template('repo_igni.html', results=result,execution_time=execution_time)
 
 
 if __name__ == '__main__':
