@@ -3,29 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>查询结果</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body, html {
             background-image: url('https://img.mp.itc.cn/upload/20170514/5e4142ab691047ae8d57a61c59817555_th.jpg');
+            background-size: cover;
+            background-position: center;
         }
         
-        body {
-            display: flex;
-            flex-direction: column; /* 设置 Flex 容器的方向为垂直 */
-            justify-content: center; /* 在垂直方向上居中对齐 Flex 项目 */
-            align-items: center; /* 在水平方向上居中对齐 Flex 项目 */
+        .container {
+            background-color: rgba(255, 255, 255, 0.8); /* 添加半透明背景以增强可读性 */
+            border-radius: 10px; /* 圆角边框 */
             padding: 20px;
-            height: 100vh; /* 设置 body 高度为视窗的 100%，以支持居中对齐 */
+            margin-top: 50px;
         }
 
-   
+        h1 {
+            color: #333;
+        }
     </style>
 </head>
 <body>
-    <h1>查询结果</h1>
-    <ul>
-        {% for result in results %}
-            <li>Order Priority: {{ result.o_orderpriority }}, Order Count: {{ result.order_count }}</li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>查询结果</h1>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Order Priority</th>
+                    <th scope="col">Order Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                    <tr>
+                        <td>{{ result.o_orderpriority }}</td>
+                        <td>{{ result.order_count }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

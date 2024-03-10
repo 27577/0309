@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Part Supplier Relations</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Part Supplier Relations</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Brand</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Supplier Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                    <tr>
+                        <td>{{ result.p_brand }}</td>
+                        <td>{{ result.p_type }}</td>
+                        <td>{{ result.p_size }}</td>
+                        <td>{{ result.supplier_cnt }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

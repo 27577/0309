@@ -3,14 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>所有客户</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body, html {
+            background-image: url('https://img.mp.itc.cn/upload/20170514/5e4142ab691047ae8d57a61c59817555_th.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100%; /* Full height */
+            margin: 0; /* Remove default margin */
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.8); /* Add a white background with some opacity */
+            border-radius: 10px; /* Rounded corners */
+            padding: 20px;
+            margin-top: 50px; /* Add some top margin */
+            width: auto; /* Auto width */
+        }
+        
+        h1 {
+            color: #333; /* Dark grey color for the heading */
+        }
+    </style>
 </head>
 <body>
-    <h1>所有客户</h1>
-    <ul>
-        {% for customer in customers %}
-         <!-- <p>客户名: {{ customer.c_name }}</p> -->
-         <li><a href="{{ url_for('customer_details', customer_name=customer.c_name) }}">{{ customer.c_name }}</a></li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>所有客户</h1>
+        <ul class="list-unstyled">
+            {% for customer in customers %}
+                <li><a href="{{ url_for('customer_details', customer_name=customer.c_name) }}" style="color: black;">{{ customer.c_name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>

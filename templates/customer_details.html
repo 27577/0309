@@ -1,24 +1,35 @@
-<!-- 示例代码，根据实际情况调整 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>客户详情</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body, html {
             background-image: url('https://img.mp.itc.cn/upload/20170514/5e4142ab691047ae8d57a61c59817555_th.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+            margin: 0;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.8); /* 添加半透明背景以增强可读性 */
+            border-radius: 10px; /* 圆角边框 */
+            padding: 20px;
+            margin-top: 50px;
         }
     </style>
 </head>
 <body>
-    <h2>客户详情</h2>
-    <p>客户名: {{ customer.c_name }}</p>
-    <p>地址: {{ customer.c_address }}</p>
-    <p>国家: {{ customer.c_nationkey }}</p>
-    <p>号码: {{ customer.c_phone }}</p>
-    <p>余额: {{ customer.c_acctbal }}</p>
-    <p>市场份额: {{ customer.c_mktsegment }}</p>
-    <p>备注: {{ customer.c_comment }}</p>
-    <!-- 根据您的 `User` 模型中的字段显示更多客户信息 -->
+    <div class="container">
+        <h2 class="mb-4">客户详情</h2>
+        <p><strong>姓名:</strong> {{ customer.c_name }}</p>
+        <p><strong>地址:</strong> {{ customer.c_address }}</p>
+        <p><strong>国家:</strong> {{ customer.c_nationkey }}</p>
+        <p><strong>号码:</strong> {{ customer.c_phone }}</p>
+        <p><strong>余额:</strong> {{ customer.c_acctbal }}</p>
+        <p><strong>市场份额:</strong> {{ customer.c_mktsegment }}</p>
+        <p><strong>备注:</strong> {{ customer.c_comment }}</p>
+    </div>
 </body>
 </html>

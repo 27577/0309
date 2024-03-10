@@ -273,13 +273,85 @@ def order_priority():
                 o_orderpriority;
         """)
         result = conn.execute(sql_query).fetchall()
-        print("********************************************************\n")
-        print(result)
-        print("********************************************************")
-
-        
-
     return render_template('order_priority.html', results=result)
+
+@app.route('/part_supplier')
+def part_supplier():
+    engine = db.get_engine()
+    with engine.connect() as conn:
+        sql_query = text("""
+            select
+                p_brand,
+                p_type,
+                p_size,
+                count(distinct ps_suppkey) as supplier_cnt
+            from
+                partsupp,
+                part
+            where
+                p_partkey = ps_partkey
+                and p_brand <> 'Brand#45'
+                and p_type not like 'MEDIUM POLISHED%'
+                and p_size in (49, 14, 23, 45, 19, 3, 36, 9)
+                and ps_suppkey not in (
+                    select
+                        s_suppkey
+                    from
+                        supplier
+                    where
+                        s_comment like '%Customer%Complaints%'
+                )
+            group by
+                p_brand,
+                p_type,
+                p_size
+            order by
+                supplier_cnt desc,
+                p_brand,
+                p_type,
+                p_size;
+
+        """)
+        result = conn.execute(sql_query).fetchall()
+    return render_template('part_supplier_relation.html', results=result)
+
+@app.route('/repo_igni')
+def repo_igni():
+    engine = db.get_engine()
+    with engine.connect() as conn:
+        sql_query = text("""
+            select
+                ps_partkey,
+                sum(ps_supplycost * ps_availqty) as value
+            from
+                partsupp,
+                supplier,
+                nation
+            where
+                ps_suppkey = s_suppkey
+                and s_nationkey = n_nationkey
+                and n_name = 'GERMANY'
+            group by
+                ps_partkey having
+                    sum(ps_supplycost * ps_availqty) > (
+                        select
+                            sum(ps_supplycost * ps_availqty) * 0.0001000000
+                        from
+                            partsupp,
+                            supplier,
+                            nation
+                        where
+                            ps_suppkey = s_suppkey
+                            and s_nationkey = n_nationkey
+                            and n_name = 'GERMANY'
+                    )
+            order by
+                value desc;
+
+        """)
+        result = conn.execute(sql_query).fetchall()
+    return render_template('repo_igni.html', results=result)
+
 
 if __name__ == '__main__':
     create_tables()

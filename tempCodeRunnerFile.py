@@ -1,10 +1,36 @@
-def download_table(table_name):
+@app.route('/repo_igni')
+def repo_igni():
     engine = db.get_engine()
-    df = pd.read_sql_table(table_name, con=engine)
+    with engine.connect() as conn:
+        sql_query = text("""
+            select
+                ps_partkey,
+                sum(ps_supplycost * ps_availqty) as value
+            from
+                partsupp,
+                supplier,
+                nation
+            where
+                ps_suppkey = s_suppkey
+                and s_nationkey = n_nationkey
+                and n_name = 'GERMANY'
+            group by
+                ps_partkey having
+                    sum(ps_supplycost * ps_availqty) > (
+                        select
+                            sum(ps_supplycost * ps_availqty) * 0.0001000000
+                        from
+                            partsupp,
+                            supplier,
+                            nation
+                        where
+                            ps_suppkey = s_suppkey
+                            and s_nationkey = n_nationkey
+                            and n_name = 'GERMANY'
+                    )
+            order by
+                value desc;
 
-    # 将 DataFrame 转换为 CSV 格式的字符串，然后发送给客户端
-    output = io.StringIO()
-    df.to_csv(output, index=False)
-    output.seek(0)
-    
-    return send_file(output, as_attachment=True, download_name=f"{table_name}.csv", mimetype='text/csv')
+        """)
+        result = conn.execute(sql_query).fetchall()
+    return render_template('repo_igni.html', results=result)
