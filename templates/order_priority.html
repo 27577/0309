@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查询结果</title>
+    <style>
+        body, html {
+            background-image: url('https://img.mp.itc.cn/upload/20170514/5e4142ab691047ae8d57a61c59817555_th.jpg');
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column; /* 设置 Flex 容器的方向为垂直 */
+            justify-content: center; /* 在垂直方向上居中对齐 Flex 项目 */
+            align-items: center; /* 在水平方向上居中对齐 Flex 项目 */
+            padding: 20px;
+            height: 100vh; /* 设置 body 高度为视窗的 100%，以支持居中对齐 */
+        }
+
+   
+    </style>
+</head>
+<body>
+    <h1>查询结果</h1>
+    <ul>
+        {% for result in results %}
+            <li>Order Priority: {{ result.o_orderpriority }}, Order Count: {{ result.order_count }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

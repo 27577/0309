@@ -1,5 +1,5 @@
 
-mysql --local-infile=1 -u root -p9417 new_schema < load_data.txt
+mysql --local-infile=1 -u root -p9417 new_schema 
 
 db.init_app(app)
 def get_tables():
@@ -19,4 +19,31 @@ def show_tables():
     
 if __name__ == '__main__':
     create_tables()
-    app.run(debug=True)
+    app.run(debug=True
+
+
+
+
+
+select
+	o_orderpriority,
+	count(*) as order_count
+from
+	orders
+where
+	o_orderdate >= date '2016-07-01'
+	and o_orderdate < date '2016-07-01' + interval '3' month
+
+	and exists (
+		select
+			*
+		from
+			lineitem
+		where
+			l_orderkey = o_orderkey
+			and l_commitdate < l_receiptdate
+	)
+group by
+	o_orderpriority
+order by
+	o_orderpriority;

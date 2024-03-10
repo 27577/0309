@@ -244,8 +244,42 @@ def download_table(table_name):
     output.seek(0)
     
     return send_file(output, as_attachment=True, download_name=f"{table_name}.csv", mimetype='text/csv')
+@app.route('/order_priority')
+def order_priority():
+    engine = db.get_engine()
+    with engine.connect() as conn:
+        # 使用 text() 封装 SQL 字符串
+        sql_query = text("""
+            SELECT
+                o_orderpriority,
+                count(*) as order_count
+            FROM
+                orders
+            WHERE
+                o_orderdate >= date '2016-07-01'
+                AND o_orderdate < date '2016-07-01' + interval '3' month
+                AND EXISTS (
+                    SELECT
+                        *
+                    FROM
+                        lineitem
+                    WHERE
+                        l_orderkey = o_orderkey
+                        AND l_commitdate < l_receiptdate
+                )
+            GROUP BY
+                o_orderpriority
+            ORDER BY
+                o_orderpriority;
+        """)
+        result = conn.execute(sql_query).fetchall()
+        print("********************************************************\n")
+        print(result)
+        print("********************************************************")
 
+        
 
+    return render_template('order_priority.html', results=result)
 
 if __name__ == '__main__':
     create_tables()
