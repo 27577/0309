@@ -1,0 +1,2 @@
+
+mysql --local-infile=1 -u root -p9417 new_schema < load_data.txt

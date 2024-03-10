@@ -75,7 +75,7 @@ def verify_delete():
 
 @app.route('/delete-users', methods=['GET', 'POST'])
 def delete_users():
-    print("--------------------------------****************************\n")
+    
     if request.method == 'POST':
         username = request.form.get('username')
         user = User.query.filter_by(username=username).first()
@@ -182,6 +182,17 @@ def exe_gen():
         return "Command executed successfully."
     except subprocess.CalledProcessError as e:
         return f"An error occurred: {e}"
+    
+@app.route('/data_imp')
+def data_imp():
+    try:
+        # 在新的cmd窗口中启动MySQL客户端，并尝试自动输入密码（注意：这可能不会按预期工作）
+        command = 'cmd.exe /c start cmd.exe /k "mysql --local-infile=1 -u root -p9417 new_schema < load_data.txt"'
+        subprocess.Popen(command, shell=True)
+        return "Attempting to open MySQL client in a new terminal window..."
+    except Exception as e:
+        return f"An error occurred: {e}"
+
 
 if __name__ == '__main__':
     create_tables()
