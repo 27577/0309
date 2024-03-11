@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Discount Salary Report</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        body, html {
+            background-image: url('https://img.mp.itc.cn/upload/20170514/5e4142ab691047ae8d57a61c59817555_th.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.8); /* 添加半透明背景以增强可读性 */
+            border-radius: 10px; /* 圆角边框 */
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <h1>查询结果</h1>
+        <p>Execution Time: {{ execution_time }} seconds</p>
+       
+        
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>Revenue</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in results %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+       
+    </div>
+ 
+</body>
+</html>

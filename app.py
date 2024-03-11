@@ -324,6 +324,88 @@ def part_supplier():
         
     return render_template('part_supplier_relation.html', results=result,execution_time=execution_time)
 
+@app.route('/discount_salary')
+def discount_salary():
+    engine = db.get_engine()
+    with engine.connect() as conn:
+        sql_query = text("""
+            select
+                sum(l_extendedprice* (1 - l_discount)) as revenue
+            from
+                lineitem,
+                part
+            where
+                (
+                    p_partkey = l_partkey
+                    and p_brand = 'Brand#12'
+                    and p_container in ('SM CASE', 'SM BOX', 'SM PACK', 'SM PKG')
+                    and l_quantity >= 1 and l_quantity <= 1 + 10
+                    and p_size between 1 and 5
+                    and l_shipmode in ('AIR', 'AIR REG')
+                    and l_shipinstruct = 'DELIVER IN PERSON'
+                )
+                or
+                (
+                    p_partkey = l_partkey
+                    and p_brand = 'Brand#23'
+                    and p_container in ('MED BAG', 'MED BOX', 'MED PKG', 'MED PACK')
+                    and l_quantity >= 10 and l_quantity <= 10 + 10
+                    and p_size between 1 and 10
+                    and l_shipmode in ('AIR', 'AIR REG')
+                    and l_shipinstruct = 'DELIVER IN PERSON'
+                )
+                or
+                (
+                    p_partkey = l_partkey
+                    and p_brand = 'Brand#34'
+                    and p_container in ('LG CASE', 'LG BOX', 'LG PACK', 'LG PKG')
+                    and l_quantity >= 20 and l_quantity <= 20 + 10
+                    and p_size between 1 and 15
+                    and l_shipmode in ('AIR', 'AIR REG')
+                    and l_shipinstruct = 'DELIVER IN PERSON'
+                );
+
+
+        """)
+        start_time = time.time()
+        result = conn.execute(sql_query).fetchall()
+        end_time = time.time()
+        execution_time=end_time-start_time
+        
+    return render_template('discount_salary.html', results=result,execution_time=execution_time)
+
+@app.route('/little_order_salary')
+def little_order_salary():
+    engine = db.get_engine()
+    with engine.connect() as conn:
+        sql_query = text("""
+            select
+                sum(l_extendedprice) / 7.0 as avg_yearly
+            from
+                lineitem,
+                part
+            where
+                p_partkey = l_partkey
+                and p_brand = 'Brand#23'
+                and p_container = 'MED BOX'
+                and l_quantity < (
+                    select
+                        0.2 * avg(l_quantity)
+                    from
+                        lineitem
+                    where
+                        l_partkey = p_partkey
+                );
+
+
+        """)
+        start_time = time.time()
+        result = conn.execute(sql_query).fetchall()
+        end_time = time.time()
+        execution_time=end_time-start_time
+        
+    return render_template('little_order_salary.html', results=result,execution_time=execution_time)
+
 @app.route('/repo_igni')
 def repo_igni():
     engine = db.get_engine()

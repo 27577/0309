@@ -47,3 +47,22 @@ group by
 	o_orderpriority
 order by
 	o_orderpriority;
+
+
+@app.route('/discount_salary')
+def discount_salary():
+    engine = db.get_engine()
+    with engine.connect() as conn:
+        sql_query = text("""
+            select
+                sum(l_extendedprice* (1 - l_discount)) as revenue
+            from
+               ...
+
+        """)
+        start_time = time.time()
+        result = conn.execute(sql_query).fetchall()
+        end_time = time.time()
+        execution_time=end_time-start_time
+        
+    return render_template('discount_salary.html', results=result,execution_time=execution_time)
