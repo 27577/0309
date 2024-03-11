@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小额订单收入查询</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body, html {
+            background-image: url('https://img.mp.itc.cn/upload/20170514/5e4142ab691047ae8d57a61c59817555_th.jpg');
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            background-color: #f7f7f7; /* 轻微的背景色 */
+            font-family: Arial, sans-serif; /* 设置字体 */
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* 添加阴影效果 */
+            width: 100%;
+            max-width: 400px; /* 调整最大宽度 */
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-control {
+            border-radius: 5px; /* 输入框圆角 */
+            border: 1px solid #ced4da;
+            padding: 10px;
+            font-size: 16px; /* 字体大小 */
+        }
+        .btn-primary {
+            border-radius: 5px; /* 按钮圆角 */
+            padding: 10px 20px;
+            font-size: 16px; /* 字体大小 */
+            background-color: #007bff; /* 背景色 */
+            border-color: #007bff; /* 边框色 */
+        }
+        .btn-primary:hover {
+            background-color: #0056b3; /* 按钮鼠标悬停颜色 */
+            border-color: #004085;
+        }
+        .btn-link {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form action="{{ url_for('little_order_salary') }}" method="POST">
+            <div class="form-group">
+                
+                <label for="p_brand">零件品牌</label>
+                <input type="text" class="form-control" id="p_brand" name="p_brand" >
+                <label for="p_container">零件包装</label>
+                <input type="text" class="form-control" id="p_container" name="p_container" >
+
+            </div>
+            <button type="submit" class="btn btn-primary">查询</button>
+        </form>
+    </div>
+</body>
+
+</html>

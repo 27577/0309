@@ -374,10 +374,24 @@ def discount_salary():
         
     return render_template('discount_salary.html', results=result,execution_time=execution_time)
 
-@app.route('/little_order_salary')
+@app.route('/little_order_args', methods=['GET'])
+def little_order_args():
+    # 渲染客户信息查询表单页面
+    return render_template('little_order_args.html')
+
+@app.route('/little_order_salary', methods=['GET', 'POST'])
 def little_order_salary():
+    # Retrieve parameters from query string
+    p_brand = request.values.get('p_brand')  # Default to 'Brand#23' if not specified
+    p_container = request.values.get('p_container')  # Default to 'MED BOX' if not specified
+    if not p_brand:
+        p_brand = 'Brand#23'
+    if not p_container:
+        p_container = 'MED BOX'
+ 
     engine = db.get_engine()
     with engine.connect() as conn:
+        # Prepare your SQL query using bound parameters
         sql_query = text("""
             select
                 sum(l_extendedprice) / 7.0 as avg_yearly
@@ -386,8 +400,8 @@ def little_order_salary():
                 part
             where
                 p_partkey = l_partkey
-                and p_brand = 'Brand#23'
-                and p_container = 'MED BOX'
+                and p_brand = :p_brand
+                and p_container = :p_container
                 and l_quantity < (
                     select
                         0.2 * avg(l_quantity)
@@ -397,12 +411,15 @@ def little_order_salary():
                         l_partkey = p_partkey
                 );
 
-
         """)
+
+        # Execute the query safely with parameters
         start_time = time.time()
-        result = conn.execute(sql_query).fetchall()
+        # result = conn.execute(sql_query,p_brand=p_brand, p_container=p_container).fetchall()
+        result = conn.execute(sql_query, {'p_brand': p_brand, 'p_container': p_container}).fetchall()
+
         end_time = time.time()
-        execution_time=end_time-start_time
+        execution_time = end_time - start_time
         
     return render_template('little_order_salary.html', results=result,execution_time=execution_time)
 
