@@ -38,10 +38,10 @@ def register():
             new_user = User(username=username, password=password)
             db.session.add(new_user)
             db.session.commit()
-            flash('User registered successfully. Please login.')
+            flash('注册成功')
             return redirect(url_for('login'))
         else:
-            flash('Username already exists. Please choose a different one.')
+            flash('该用户已存在')
             
     return render_template('register.html')
 
@@ -57,7 +57,7 @@ def login():
             session['username'] = username
             return redirect(url_for('workbench'))
         else:
-            flash('Invalid username or password')
+            flash('账号或密码错误')
     return render_template('login.html')
 
 @app.route('/users')
@@ -73,7 +73,7 @@ def verify_delete():
             # 密码正确，重定向到删除用户的页面
             return redirect(url_for('delete_users'))
         else:
-            flash('Incorrect password. Please try again.')
+            flash('密码错误')
             return redirect(url_for('verify_delete'))
     return render_template('verify_delete.html')
 
@@ -87,9 +87,9 @@ def delete_users():
         if user:
             db.session.delete(user)
             db.session.commit()
-            flash(f'User {username} has been deleted.')
+            flash(f'用户 {username} 已删除')
         else:
-            flash('User not found.')
+            flash('用户不存在')
         return redirect(url_for('delete_users'))
     return render_template('delete_users.html')
 

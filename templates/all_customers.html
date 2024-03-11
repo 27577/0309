@@ -28,7 +28,6 @@
 </head>
 <body>
     <div class="container">
-        <h1>所有客户</h1>
         <ul class="list-unstyled">
             {% for customer in customers %}
                 <li><a href="{{ url_for('customer_details', customer_name=customer.c_name) }}" style="color: black;">{{ customer.c_name }}</a></li>

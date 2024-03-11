@@ -19,26 +19,12 @@
             margin-top: 50px;
             width: auto;
         }
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        label {
-            margin-bottom: .5rem;
-        }
-        input {
-            margin-bottom: .5rem;
-            display: block;
-            width: 100%;
-        }
-        .message {
-            color: #dc3545; /* Bootstrap "danger" 色 */
-            margin-bottom: .5rem;
-        }
+        
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center mb-4">修改数据库信息</h1>
+        <h2 class="text-center mb-4">修改数据库连接时长</h2>
 
         {% for message in get_flashed_messages() %}
         <div class="alert alert-warning" role="alert">{{ message }}</div>

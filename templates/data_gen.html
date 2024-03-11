@@ -48,24 +48,18 @@
             background-color: #007bff; /* 背景色 */
             border-color: #007bff; /* 边框色 */
         }
-        .btn-primary:hover {
-            background-color: #0056b3; /* 按钮鼠标悬停颜色 */
-            border-color: #004085;
-        }
-        .btn-link {
-            font-size: 16px;
-        } */
+        
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Data Generator</h2>
+        <h2>数据生成</h2>
         <form action="{{ url_for('exe_gen') }}" method="POST">
             <div class="form-group">
-                <label for="command">Enter Command:</label>
+                <label for="command">输入命令</label>
                 <input type="text" id="command" name="command" required>
             </div>
-            <button type="submit">Generate</button>
+            <button type="submit" class="btn btn-primary">生成</button>
         </form>
     </div>
 </body>

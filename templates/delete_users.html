@@ -45,24 +45,18 @@
             background-color: #007bff; /* 背景色 */
             border-color: #007bff; /* 边框色 */
         }
-        .btn-primary:hover {
-            background-color: #0056b3; /* 按钮鼠标悬停颜色 */
-            border-color: #004085;
-        }
-        .btn-link {
-            font-size: 16px;
-        }
+        
     </style>
 </head>
 <body>
     <div class="container">
-        <h2 class="mt-5">Delete User</h2>
+        <h2 class="mt-5">删除用户</h2>
         <form method="POST" action="/delete-users">
             <div class="form-group mb-3">
-                <label for="username">Username to delete:</label>
+                <label for="username">用户名:</label>
                 <input type="text" class="form-control" name="username" required>
             </div>
-            <button type="submit" class="btn btn-danger">Delete User</button>
+            <button type="submit" class="btn btn-primary">删除</button>
         </form>
     </div>
 </body>
