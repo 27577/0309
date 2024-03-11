@@ -213,7 +213,7 @@ def exe_gen():
 @app.route('/data_imp')
 def data_imp():
     try:
-        # 在新的cmd窗口中启动MySQL客户端，并尝试自动输入密码（注意：这可能不会按预期工作）
+        # 在新的cmd窗口中启动MySQL客户端，并尝试自动输入密码
         command = 'cmd.exe /c start cmd.exe /k "mysql --local-infile=1 -u root -p9417 new_schema < load_data.txt"'
         subprocess.Popen(command, shell=True)
         return "Attempting to open MySQL client in a new terminal window..."
@@ -245,8 +245,11 @@ def download_table(table_name):
     output.seek(0)
     
     return send_file(output, as_attachment=True, download_name=f"{table_name}.csv", mimetype='text/csv')
-@app.route('/order_priority')
+@app.route('/order_priority',methods=['GET', 'POST'])
 def order_priority():
+    o_orderdate = request.values.get('o_orderdate')  
+    if not o_orderdate:
+        o_orderdate = '2016-07-01'
     engine = db.get_engine()
     with engine.connect() as conn:
         # 使用 text() 封装 SQL 字符串
@@ -257,8 +260,8 @@ def order_priority():
             FROM
                 orders
             WHERE
-                o_orderdate >= date '2016-07-01'
-                AND o_orderdate < date '2016-07-01' + interval '3' month
+                o_orderdate >= :o_orderdate
+                AND o_orderdate < date :o_orderdate + interval '3' month
                 AND EXISTS (
                     SELECT
                         *
@@ -274,7 +277,7 @@ def order_priority():
                 o_orderpriority;
         """)
         start_time = time.time()
-        result = conn.execute(sql_query).fetchall()
+        result = conn.execute(sql_query,{'o_orderdate': o_orderdate}).fetchall()
         end_time = time.time()
         execution_time=end_time-start_time
         
@@ -381,6 +384,11 @@ def discount_salary():
 def little_order_args():
     # 渲染客户信息查询表单页面
     return render_template('little_order_args.html')
+
+@app.route('/order_priority_args', methods=['GET'])
+def order_priority_args():
+    # 渲染客户信息查询表单页面
+    return render_template('order_priority_args.html')
 
 @app.route('/discount_salary_args', methods=['GET'])
 def discount_salary_args():

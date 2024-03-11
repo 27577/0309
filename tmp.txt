@@ -66,3 +66,30 @@ def discount_salary():
         execution_time=end_time-start_time
         
     return render_template('discount_salary.html', results=result,execution_time=execution_time)
+
+
+    @app.route('/order_priority',methods=['GET', 'POST'])
+def order_priority():
+    o_orderdate = request.values.get('o_orderdate')  
+    if not o_orderdate:
+        o_orderdate = '2016-07-01'
+    engine = db.get_engine()
+    with engine.connect() as conn:
+        # 使用 text() 封装 SQL 字符串
+        sql_query = text("""
+            SELECT
+                o_orderpriority,
+                count(*) as order_count
+            FROM
+                orders
+            WHERE
+                o_orderdate >= :o_orderdate
+                AND o_orderdate < date ':o_orderdate' + interval '3' month
+                ....
+        """)
+        start_time = time.time()
+        result = conn.execute(sql_query,{'o_orderdate': o_orderdate,'o_orderdate': o_orderdate}).fetchall()
+        end_time = time.time()
+        execution_time=end_time-start_time
+        
+    return render_template('order_priority.html', results=result,execution_time=execution_time)
