@@ -93,3 +93,48 @@ def order_priority():
         execution_time=end_time-start_time
         
     return render_template('order_priority.html', results=result,execution_time=execution_time)
+
+
+
+
+
+    sql_query = text("""
+            LOAD DATA LOCAL INFILE 'C:/Users/27577/Desktop/tools/教材/大三下/数据库/数据库系统原理课程设计-2-TPC电商数据管理系统/TPC-H/dbgen/region.tbl'
+            INTO TABLE REGION
+            FIELDS TERMINATED BY '|' 
+            LINES TERMINATED BY '\n'
+            (R_REGIONKEY, R_NAME,R_COMMENT);
+        """)
+
+
+        C:/Users/27577/Documents/AllCode/db/region_split路径下有seg_num个文件，分别是1.tbl ,2.tbl...seg_num.tbl
+        要使用以下代码将他们都导入数据库怎么做
+        sql_query = text("""
+            LOAD DATA LOCAL INFILE ''
+            INTO TABLE REGION
+            FIELDS TERMINATED BY '|' 
+            LINES TERMINATED BY '\n'
+            (R_REGIONKEY, R_NAME,R_COMMENT);
+        """)
+        conn.execute(sql_query)
+
+
+folder_path = 'C:/Users/27577/Documents/AllCode/db/region_split'
+
+for i in range(1, seg_num + 1):
+    file_path = os.path.join(folder_path, f'{i}.tbl')
+    
+    # 构建SQL查询，动态插入文件路径
+    sql_query = text(f"""
+        LOAD DATA LOCAL INFILE '{file_path}'
+        INTO TABLE REGION
+        FIELDS TERMINATED BY '|' 
+        LINES TERMINATED BY '\n'
+        (R_REGIONKEY, R_NAME, R_COMMENT);
+    """)
+    
+    # 执行SQL查询导入数据
+    with engine.connect() as conn:
+        conn.execute(sql_query)
+
+print("所有文件导入完成")

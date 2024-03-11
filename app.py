@@ -4,15 +4,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from models import db
 from sqlalchemy import text  # 导入 text 函数
 import subprocess
-import os
 import pandas as pd
 import io
 from io import BytesIO
 import time
-
+import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'YourSecretKeyHere'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:9417@localhost/new_schema'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:9417@localhost/new_schema?local_infile=1'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
@@ -202,23 +201,119 @@ def exe_gen():
     # 构建命令行命令
     dbgen_path = r"C:\Users\27577\Desktop\tools\教材\大三下\数据库\数据库系统原理课程设计-2-TPC电商数据管理系统\TPC-H\dbgen"
     command = f"dbgen.exe {command_input}"
-    input_data = ('y\n'*8).encode('utf-8')
     try:
         # 执行命令
-        subprocess.run(command, input=input_data,check=True, shell=True, cwd=dbgen_path)
+        subprocess.run(command,check=True, shell=True, cwd=dbgen_path)
         return "Command executed successfully."
     except subprocess.CalledProcessError as e:
         return f"An error occurred: {e}"
     
+# @app.route('/data_imp')
+# def data_imp():
+#     try:
+#         # 在新的cmd窗口中启动MySQL客户端，并尝试自动输入密码
+#         command = 'cmd.exe /c start cmd.exe /k "mysql --local-infile=1 -u root -p9417 new_schema < load_data.txt"'
+#         subprocess.Popen(command, shell=True)
+#         return "Attempting to open MySQL client in a new terminal window..."
+#     except Exception as e:
+#         return f"An error occurred: {e}"
+def split_file(original_file, line_count=50):
+    with open(original_file, 'r', encoding='utf-8') as file:
+        file_lines = file.readlines()
+
+    # 使用original_file的基础名称（不含扩展名）作为目录名的一部分
+    base_name = os.path.splitext(os.path.basename(original_file))[0]
+    output_folder = f'{base_name}_split'
+    
+    # 确保文件夹存在，用于存放分割后的文件
+    os.makedirs(output_folder, exist_ok=True)
+
+    file_index = 1
+    for i in range(0, len(file_lines), line_count):
+        part_file_path = os.path.join(output_folder, f'{file_index}.tbl')
+        with open(part_file_path, 'w', encoding='utf-8') as file:
+            file.writelines(file_lines[i:i+line_count])
+        file_index += 1
+
+    return file_index - 1  # 返回创建的文件数
+
+    
+
 @app.route('/data_imp')
 def data_imp():
-    try:
-        # 在新的cmd窗口中启动MySQL客户端，并尝试自动输入密码
-        command = 'cmd.exe /c start cmd.exe /k "mysql --local-infile=1 -u root -p9417 new_schema < load_data.txt"'
-        subprocess.Popen(command, shell=True)
-        return "Attempting to open MySQL client in a new terminal window..."
-    except Exception as e:
-        return f"An error occurred: {e}"
+    path0='C:/Users/27577/Desktop/tools/教材/大三下/数据库/数据库系统原理课程设计-2-TPC电商数据管理系统/TPC-H/dbgen/'
+    path_customer=os.path.join(path0,'customer.tbl')
+    path_lineitem=os.path.join(path0,'lineitem.tbl')
+    path_nation=os.path.join(path0,'nation.tbl')
+    path_orders=os.path.join(path0,'orders.tbl')
+    path_part=os.path.join(path0,'part.tbl')
+    path_partsupp=os.path.join(path0,'partsupp.tbl')
+    path_region=os.path.join(path0,'region.tbl')
+    path_supplier=os.path.join(path0,'supplier.tbl')
+   
+    region_num=split_file(path_region)
+    customer_num=split_file(path_customer)
+    lineitem_num =split_file(path_lineitem)
+    nation_num=split_file(path_nation)
+    orders_num=split_file(path_orders)
+    part_num=split_file(path_part)
+    partsupp_num=split_file(path_partsupp)
+    supplier_num=split_file(path_supplier)
+ 
+    engine = db.get_engine()
+    with engine.connect() as conn:
+        # 使用 text() 封装 SQL 字符串
+        conn.execute(text("""set global local_infile = 'ON';"""))
+        region_folder_path = "C:/Users/27577/Documents/AllCode/db/region_split"
+        for i in range(1, region_num + 1):
+            file_path = region_folder_path+ f'/{i}.tbl'
+            
+            # 构建SQL查询，动态插入文件路径
+            region_sql_query = text(f"""
+                LOAD DATA LOCAL INFILE '{file_path}'
+                INTO TABLE REGION
+                FIELDS TERMINATED BY '|' 
+                LINES TERMINATED BY '\n'
+                (R_REGIONKEY, R_NAME, R_COMMENT);
+            """)
+        customer_folder_path = "C:/Users/27577/Documents/AllCode/db/customer_split"
+        for i in range(1, customer_num + 1):
+            file_path = customer_folder_path+ f'/{i}.tbl'
+            
+            # 构建SQL查询，动态插入文件路径
+            customer_sql_query = text(f"""
+                LOAD DATA LOCAL INFILE '{file_path}'
+                INTO TABLE CUSTOMER
+                FIELDS TERMINATED BY '|'
+                LINES TERMINATED BY '\n'
+                (C_CUSTKEY, C_NAME, C_ADDRESS, C_NATIONKEY, C_PHONE, C_ACCTBAL, C_MKTSEGMENT, C_COMMENT);
+
+
+            """)
+        lineitem_folder_path = "C:/Users/27577/Documents/AllCode/db/lineitem_split"
+        for i in range(1, lineitem_num + 1):
+            file_path = lineitem_folder_path+ f'/{i}.tbl'
+            
+            # 构建SQL查询，动态插入文件路径
+            lineitem_sql_query = text(f"""
+                LOAD DATA LOCAL INFILE '{file_path}'
+                INTO TABLE LINEITEM
+                FIELDS TERMINATED BY '|'
+                LINES TERMINATED BY '\n'
+                (L_ORDERKEY, L_PARTKEY, L_SUPPKEY, L_LINENUMBER, L_QUANTITY, L_EXTENDEDPRICE, L_DISCOUNT, L_TAX, L_RETURNFLAG, L_LINESTATUS, L_SHIPDATE, L_COMMITDATE, L_RECEIPTDATE, L_SHIPINSTRUCT, L_SHIPMODE, L_COMMENT);
+
+
+            """)
+        
+            
+            # 执行SQL查询导入数据
+            
+            conn.execute(region_sql_query)
+            conn.execute(customer_sql_query)
+            conn.execute(lineitem_sql_query)
+
+    return("import success")
+
 
 def get_tables():
     engine = db.get_engine()
