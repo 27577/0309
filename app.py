@@ -324,8 +324,11 @@ def part_supplier():
         
     return render_template('part_supplier_relation.html', results=result,execution_time=execution_time)
 
-@app.route('/discount_salary')
+@app.route('/discount_salary' ,methods=['GET', 'POST'])
 def discount_salary():
+    p_brand = request.values.get('p_brand')  
+    if not p_brand:
+        p_brand = 'Brand#12'
     engine = db.get_engine()
     with engine.connect() as conn:
         sql_query = text("""
@@ -337,7 +340,7 @@ def discount_salary():
             where
                 (
                     p_partkey = l_partkey
-                    and p_brand = 'Brand#12'
+                    and p_brand = :p_brand
                     and p_container in ('SM CASE', 'SM BOX', 'SM PACK', 'SM PKG')
                     and l_quantity >= 1 and l_quantity <= 1 + 10
                     and p_size between 1 and 5
@@ -368,7 +371,7 @@ def discount_salary():
 
         """)
         start_time = time.time()
-        result = conn.execute(sql_query).fetchall()
+        result = conn.execute(sql_query,{'p_brand': p_brand}).fetchall()
         end_time = time.time()
         execution_time=end_time-start_time
         
@@ -378,6 +381,11 @@ def discount_salary():
 def little_order_args():
     # 渲染客户信息查询表单页面
     return render_template('little_order_args.html')
+
+@app.route('/discount_salary_args', methods=['GET'])
+def discount_salary_args():
+    # 渲染客户信息查询表单页面
+    return render_template('discount_salary_args.html')
 
 @app.route('/little_order_salary', methods=['GET', 'POST'])
 def little_order_salary():
