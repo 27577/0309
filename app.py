@@ -314,6 +314,13 @@ def data_imp():
 
     return("import success")
 
+@app.route('/data_clean')
+def data_clean():
+    with open('clear.py', 'r') as file:
+        exec(file.read(),globals())
+    return ("clean success")
+    
+
 
 def get_tables():
     engine = db.get_engine()
