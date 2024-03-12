@@ -1,12 +1,17 @@
 
 set global local_infile = 'ON';
-c
 
 LOAD DATA LOCAL INFILE 'C:/Users/27577/Desktop/tools/教材/大三下/数据库/数据库系统原理课程设计-2-TPC电商数据管理系统/TPC-H/dbgen/region.tbl'
 INTO TABLE REGION
 FIELDS TERMINATED BY '|' 
 LINES TERMINATED BY '\n'
 (R_REGIONKEY, R_NAME,R_COMMENT);
+
+LOAD DATA LOCAL INFILE 'C:/Users/27577/Desktop/tools/教材/大三下/数据库/数据库系统原理课程设计-2-TPC电商数据管理系统/TPC-H/dbgen/orders.tbl'
+INTO TABLE ORDERS
+FIELDS TERMINATED BY '|' 
+LINES TERMINATED BY '\n'
+(O_ORDERKEY, O_CUSTKEY,O_ORDERSTATUS,O_TOTALPRICE,O_ORDERDATE,O_ORDERPRIORITY,O_CLERK,O_SHIPPRIORITY,O_COMMENT);
 
 LOAD DATA LOCAL INFILE 'C:/Users/27577/Desktop/tools/教材/大三下/数据库/数据库系统原理课程设计-2-TPC电商数据管理系统/TPC-H/dbgen/nation.tbl'
 INTO TABLE NATION

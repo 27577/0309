@@ -84,7 +84,8 @@
                             <div class="card-body">
                                 <a href="{{ url_for('data_gen') }}"style="color: black;">数据生成</a><br>
                                 <a href="{{ url_for('data_clean') }}"style="color: black;">数据清洗</a><br>
-                                <a href="{{ url_for('data_imp') }}"style="color: black;">数据导入</a><br>
+                                <a href="{{ url_for('data_imp') }}"style="color: black;">数据分批导入</a><br>
+                                <a href="{{ url_for('data_imp_all') }}"style="color: black;">数据全部导入</a><br>
                                 <a href="{{ url_for('show_tables') }}"style="color: black;">数据导出</a><br>
                                 
                                 <!-- 更多功能链接 -->
@@ -153,10 +154,7 @@
                         </div>
                         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#sidebarMenu">
                             <div class="card-body">
-                                <a href="#">功能a</a><br>
-                                <a href="#">功能b</a><br>
-                                <a href="#">功能c</a><br>
-                                <a href="#">功能d</a><br>
+                                <a href="{{url_for('concurrency_test_args')}}"style="color: black;">多线程测试</a><br>
                                 <!-- 更多功能链接 -->
                             </div>
                         </div>
@@ -190,7 +188,7 @@
     </div>
     <!-- 引入 Bootstrap JS 和依赖 -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.9/dist/umd/popper.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.9/dist/umd/popper.min.js"></script> -->
     <script src="https://cdn.staticfile.org/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

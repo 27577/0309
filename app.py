@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session,send_file, make_response
+from flask import Flask, render_template, request, redirect, url_for, flash, session,send_file, make_response,jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db
@@ -9,6 +9,8 @@ import io
 from io import BytesIO
 import time
 import os
+from concurrent.futures import ThreadPoolExecutor,as_completed
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'YourSecretKeyHere'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:9417@localhost/new_schema?local_infile=1'
@@ -208,15 +210,63 @@ def exe_gen():
     except subprocess.CalledProcessError as e:
         return f"An error occurred: {e}"
     
-# @app.route('/data_imp')
-# def data_imp():
-#     try:
-#         # 在新的cmd窗口中启动MySQL客户端，并尝试自动输入密码
-#         command = 'cmd.exe /c start cmd.exe /k "mysql --local-infile=1 -u root -p9417 new_schema < load_data.txt"'
-#         subprocess.Popen(command, shell=True)
-#         return "Attempting to open MySQL client in a new terminal window..."
-#     except Exception as e:
-#         return f"An error occurred: {e}"
+@app.route('/data_imp_all')
+def data_imp_all():
+    try:
+        # 在新的cmd窗口中启动MySQL客户端，并尝试自动输入密码
+        command = 'cmd.exe /c start cmd.exe /k "mysql --local-infile=1 -u root -p9417 new_schema < load_data.txt"'
+        subprocess.Popen(command, shell=True)
+        return "Attempting to open MySQL client in a new terminal window..."
+    except Exception as e:
+        return f"An error occurred: {e}"
+
+def run_command(command):
+    start_time = time.time()
+    subprocess.run(command, shell=True, check=True)
+    end_time = time.time()
+    return end_time-start_time
+
+@app.route('/concurrency_test_args',methods=['GET'])
+def concurrency_test_args():
+    return render_template('concurrency_test_args.html')
+
+@app.route('/concurrency_test', methods=['GET', 'POST'])
+def concurrency_test():
+    concurrency_num = int(request.values.get('concurrency_num'))
+    durations = []
+    disql_path="mysql -u root -p9417 new_schema < C:\\Users\\27577\\Desktop\\tools\\教材\\大三下\\数据库\\数据库系统原理课程设计-2-TPC电商数据管理系统\\TPC-H\\dbgen\\queries"
+    commands = [
+    disql_path + "\\" + "d3.sql",
+    disql_path + "\\" + "d4.sql",
+    disql_path + "\\" + "d6.sql",
+    disql_path + "\\" + "d9.sql",
+    disql_path + "\\" + "d13.sql",
+    ]
+    start=time.time()
+    with ThreadPoolExecutor(max_workers=concurrency_num) as executor:
+    
+        future_to_command = {executor.submit(run_command, cmd): cmd for cmd in commands}
+        for future in as_completed(future_to_command):
+            duration = future.result()
+            durations.append(duration)
+    # 计算平均延迟和吞吐量
+    end= time.time()
+    actual_time=end-start
+    total_time = sum(durations)
+    average_latency = actual_time / len(commands)
+    throughput = len(commands) / actual_time
+    
+    # 将结果作为 JSON 返回
+    results = {
+        
+        "average_latency": average_latency,
+        "throughput": throughput,
+        "total_execution_time": total_time,
+        "actual_time":actual_time
+    }
+
+    return render_template('concurrency_test.html', results=results)
+
 def split_file(original_file, line_count=50):
     with open(original_file, 'r', encoding='utf-8') as file:
         file_lines = file.readlines()

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>concurrency_test</title>
+    <!-- 引入 Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-5">性能分析</h1>
+    <div class="mt-3">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">指标</th>
+                    <th scope="col">数值</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>平均延迟（s）</td>
+                    <td id="average_latency">{{results.average_latency}}</td>
+                </tr>
+                <tr>
+                    <td>吞吐量（个/s）</td>
+                    <td id="throughput">{{results.throughput}}</td>
+                </tr>
+                <tr>
+                    <td>总执行时间（s）</td>
+                    <td id="total_execution_time">{{results.total_execution_time}}</td>
+                </tr>
+                <tr>
+                    <td>实际执行时间（s）</td>
+                    <td id="actual_time">{{results.actual_time}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- 引入 jQuery 和 Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<script>
+$(document).ready(function(){
+    // 替换为您的 Flask 应用端点
+    $.getJSON("/concurrency_test", function(data) {
+        $("#average_latency").text(data.average_latency.toFixed(2));
+        $("#throughput").text(data.throughput.toFixed(2));
+        $("#total_execution_time").text(data.total_execution_time.toFixed(2));
+        $("#actual_time").text(data.actual_time.toFixed(2));
+
+    });
+});
+</script>
+</body>
+</html>
