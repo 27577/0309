@@ -197,11 +197,12 @@ def database_changeInfo():
 def data_gen():
     # 显示命令输入表单
     return render_template('data_gen.html')
+
 @app.route('/exe_gen', methods=['POST'])
 def exe_gen():
     command_input = request.form['command']
     # 构建命令行命令
-    dbgen_path = r"C:\Users\27577\Desktop\tools\教材\大三下\数据库\数据库系统原理课程设计-2-TPC电商数据管理系统\TPC-H\dbgen"
+    dbgen_path = "dbgen"
     command = f"dbgen.exe {command_input}"
     try:
         # 执行命令
@@ -234,7 +235,7 @@ def concurrency_test_args():
 def concurrency_test():
     concurrency_num = int(request.values.get('concurrency_num'))
     durations = []
-    disql_path="mysql -u root -p9417 new_schema < C:\\Users\\27577\\Desktop\\tools\\教材\\大三下\\数据库\\数据库系统原理课程设计-2-TPC电商数据管理系统\\TPC-H\\dbgen\\queries"
+    disql_path="mysql -u root -p9417 new_schema < queries"
     commands = [
     disql_path + "\\" + "d3.sql",
     disql_path + "\\" + "d4.sql",
@@ -273,7 +274,7 @@ def split_file(original_file, line_count=50):
 
     # 使用original_file的基础名称（不含扩展名）作为目录名的一部分
     base_name = os.path.splitext(os.path.basename(original_file))[0]
-    output_folder = f'{base_name}_split'
+    output_folder = f'split/{base_name}_split'
     
     # 确保文件夹存在，用于存放分割后的文件
     os.makedirs(output_folder, exist_ok=True)
@@ -287,19 +288,17 @@ def split_file(original_file, line_count=50):
 
     return file_index - 1  # 返回创建的文件数
 
-    
-
-@app.route('/data_imp')
-def data_imp():
-    path0='C:/Users/27577/Desktop/tools/教材/大三下/数据库/数据库系统原理课程设计-2-TPC电商数据管理系统/TPC-H/dbgen/'
-    path_customer=os.path.join(path0,'customer.tbl')
-    path_lineitem=os.path.join(path0,'lineitem.tbl')
-    path_nation=os.path.join(path0,'nation.tbl')
-    path_orders=os.path.join(path0,'orders.tbl')
-    path_part=os.path.join(path0,'part.tbl')
-    path_partsupp=os.path.join(path0,'partsupp.tbl')
-    path_region=os.path.join(path0,'region.tbl')
-    path_supplier=os.path.join(path0,'supplier.tbl')
+@app.route('/data_split')
+def data_split():
+    path0='clean_data/'
+    path_customer=os.path.join(path0,'clean_customer.tbl')
+    path_lineitem=os.path.join(path0,'clean_lineitem.tbl')
+    path_nation=os.path.join(path0,'clean_nation.tbl')
+    path_orders=os.path.join(path0,'clean_orders.tbl')
+    path_part=os.path.join(path0,'clean_part.tbl')
+    path_partsupp=os.path.join(path0,'clean_partsupp.tbl')
+    path_region=os.path.join(path0,'clean_region.tbl')
+    path_supplier=os.path.join(path0,'clean_supplier.tbl')
    
     region_num=split_file(path_region)
     customer_num=split_file(path_customer)
@@ -309,12 +308,24 @@ def data_imp():
     part_num=split_file(path_part)
     partsupp_num=split_file(path_partsupp)
     supplier_num=split_file(path_supplier)
- 
+    page_table={region_num,customer_num,lineitem_num,nation_num,orders_num,part_num,partsupp_num,supplier_num}
+    return page_table
+
+@app.route('/data_imp')
+def data_imp():
+
+    region_num=len(os.listdir("split\clean_region_split"))
+    customer_num=len(os.listdir("split\clean_customer_split"))
+    lineitem_num=len(os.listdir("split\clean_lineitem_split"))
+    print(region_num)
+    print(customer_num)
+    print(lineitem_num)
+    
     engine = db.get_engine()
     with engine.connect() as conn:
         # 使用 text() 封装 SQL 字符串
         conn.execute(text("""set global local_infile = 'ON';"""))
-        region_folder_path = "C:/Users/27577/Documents/AllCode/db/region_split"
+        region_folder_path = "split/clean_region_split"
         for i in range(1, region_num + 1):
             file_path = region_folder_path+ f'/{i}.tbl'
             
@@ -326,7 +337,7 @@ def data_imp():
                 LINES TERMINATED BY '\n'
                 (R_REGIONKEY, R_NAME, R_COMMENT);
             """)
-        customer_folder_path = "C:/Users/27577/Documents/AllCode/db/customer_split"
+        customer_folder_path = "split/clean_customer_split"
         for i in range(1, customer_num + 1):
             file_path = customer_folder_path+ f'/{i}.tbl'
             
@@ -340,33 +351,33 @@ def data_imp():
 
 
             """)
-        lineitem_folder_path = "C:/Users/27577/Documents/AllCode/db/lineitem_split"
-        for i in range(1, lineitem_num + 1):
-            file_path = lineitem_folder_path+ f'/{i}.tbl'
+        # lineitem_folder_path = "split/clean_lineitem_split"
+        # for i in range(1, lineitem_num + 1):
+        #     file_path = lineitem_folder_path+ f'/{i}.tbl'
             
-            # 构建SQL查询，动态插入文件路径
-            lineitem_sql_query = text(f"""
-                LOAD DATA LOCAL INFILE '{file_path}'
-                INTO TABLE LINEITEM
-                FIELDS TERMINATED BY '|'
-                LINES TERMINATED BY '\n'
-                (L_ORDERKEY, L_PARTKEY, L_SUPPKEY, L_LINENUMBER, L_QUANTITY, L_EXTENDEDPRICE, L_DISCOUNT, L_TAX, L_RETURNFLAG, L_LINESTATUS, L_SHIPDATE, L_COMMITDATE, L_RECEIPTDATE, L_SHIPINSTRUCT, L_SHIPMODE, L_COMMENT);
+        #     # 构建SQL查询，动态插入文件路径
+        #     lineitem_sql_query = text(f"""
+        #         LOAD DATA LOCAL INFILE '{file_path}'
+        #         INTO TABLE LINEITEM
+        #         FIELDS TERMINATED BY '|'
+        #         LINES TERMINATED BY '\n'
+        #         (L_ORDERKEY, L_PARTKEY, L_SUPPKEY, L_LINENUMBER, L_QUANTITY, L_EXTENDEDPRICE, L_DISCOUNT, L_TAX, L_RETURNFLAG, L_LINESTATUS, L_SHIPDATE, L_COMMITDATE, L_RECEIPTDATE, L_SHIPINSTRUCT, L_SHIPMODE, L_COMMENT);
 
 
-            """)
+        #     """)
         
             
             # 执行SQL查询导入数据
             
             conn.execute(region_sql_query)
             conn.execute(customer_sql_query)
-            conn.execute(lineitem_sql_query)
+            # conn.execute(lineitem_sql_query)
 
     return("import success")
 
 @app.route('/data_clean')
 def data_clean():
-    with open('clear.py', 'r') as file:
+    with open('clean.py', 'r') as file:
         exec(file.read(),globals())
     return ("clean success")
     
