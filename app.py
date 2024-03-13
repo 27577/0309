@@ -268,6 +268,28 @@ def concurrency_test():
 
     return render_template('concurrency_test.html', results=results)
 
+@app.route('/multi_user_args',methods=['GET'])
+def multi_user_args():
+    return render_template('multi_user_args.html')
+
+@app.route('/multi_user', methods=['GET', 'POST'])
+def multi_user():
+    user_num = int(request.values.get('user_num'))
+    query_num = int(request.values.get('query_num'))
+    key_num = int(request.values.get('key_num'))
+    iter_num= int(request.values.get('iter_num'))
+    command = f"mysqlslap -uroot -p9417 --iterations={iter_num} --concurrency={user_num} --number-of-queries={query_num} --number-int-cols={key_num} --number-char-cols={key_num} --auto-generate-sql"
+    
+    # Execute the command and capture its output
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    output, error = process.communicate()
+    
+    if process.returncode == 0:
+        return render_template('multi_user.html', output=output.decode('utf-8'))
+    else:
+        return "error"
+
+
 def split_file(original_file, line_count=50):
     with open(original_file, 'r', encoding='utf-8') as file:
         file_lines = file.readlines()
